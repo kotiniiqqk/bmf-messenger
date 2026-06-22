@@ -2,7 +2,8 @@ import type { SVGProps } from "react";
 
 type IconName =
   | "logo" | "search" | "gear" | "mail" | "home"
-  | "send" | "attach" | "emoji" | "phone" | "video" | "more";
+  | "send" | "attach" | "emoji" | "phone" | "video" | "more"
+  | "plus" | "logout";
 
 const PATHS: Record<IconName, JSX.Element> = {
   logo: <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />,
@@ -15,7 +16,9 @@ const PATHS: Record<IconName, JSX.Element> = {
   emoji: <><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2" /><line x1="9" y1="9" x2="9.01" y2="9" strokeLinecap="round" strokeWidth={3} /><line x1="15" y1="9" x2="15.01" y2="9" strokeLinecap="round" strokeWidth={3} /></>,
   phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.58a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 15.92z" />,
   video: <><polygon points="23 7 16 12 23 17 23 7" /><rect x="1" y="5" width="15" height="14" rx="2" /></>,
-  more: <><circle cx="12" cy="5" r="1" fill="currentColor" /><circle cx="12" cy="12" r="1" fill="currentColor" /><circle cx="12" cy="19" r="1" fill="currentColor" /></>
+  more: <><circle cx="12" cy="5" r="1" fill="currentColor" /><circle cx="12" cy="12" r="1" fill="currentColor" /><circle cx="12" cy="19" r="1" fill="currentColor" /></>,
+  plus: <><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></>,
+  logout: <><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></>
 };
 
 export function Icon({ name, ...props }: { name: IconName } & SVGProps<SVGSVGElement>) {

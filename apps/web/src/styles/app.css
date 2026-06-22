@@ -236,3 +236,38 @@ body {
   transition: all 0.25s;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── SPLASH / AUTH ── */
+.splash { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--txt2); background: var(--bg); }
+.auth { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--bg); }
+.auth-card {
+  width: 340px; max-width: 100%; display: flex; flex-direction: column; gap: 10px;
+  background: var(--sp-bg); border: 1px solid var(--brd); border-radius: 22px; padding: 26px 24px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+}
+.auth-logo { display: flex; align-items: center; gap: 8px; justify-content: center; margin-bottom: 4px; }
+.auth-logo svg { width: 26px; height: 26px; stroke: var(--acc); stroke-width: 2; fill: none; }
+.auth-logo span { font-size: 20px; font-weight: 800; color: var(--txt); letter-spacing: -0.3px; }
+.auth-title { font-size: 18px; font-weight: 700; color: var(--txt); text-align: center; }
+.auth-sub { font-size: 12.5px; color: var(--txt2); text-align: center; margin-bottom: 6px; }
+.auth-inp {
+  height: 42px; border: 1px solid var(--brd); border-radius: 13px; background: var(--inp);
+  color: var(--txt); font-size: 14px; padding: 0 14px; outline: none; font-family: inherit;
+  transition: border-color 0.15s, background 0.15s;
+}
+.auth-inp:focus { border-color: var(--acc); background: var(--hov); }
+.auth-inp::placeholder { color: var(--txt2); }
+.auth-hint { font-size: 11.5px; color: var(--txt2); padding: 0 2px; }
+.auth-hint b { color: var(--acc); }
+.auth-err { font-size: 12.5px; color: #ff5f57; background: rgba(255, 95, 87, 0.1); border-radius: 10px; padding: 8px 12px; }
+.auth-btn {
+  height: 44px; border: none; border-radius: 13px; background: var(--acc); color: #fff;
+  font-size: 14.5px; font-weight: 700; cursor: pointer; margin-top: 4px; font-family: inherit;
+  transition: filter 0.15s, opacity 0.15s;
+}
+.auth-btn:hover:not(:disabled) { filter: brightness(1.1); }
+.auth-btn:disabled { opacity: 0.5; cursor: default; }
+.auth-switch { font-size: 12.5px; color: var(--txt2); text-align: center; margin-top: 2px; }
+.auth-switch span { color: var(--acc); font-weight: 600; cursor: pointer; }
+.chat-empty { padding: 30px 16px; text-align: center; color: var(--txt2); font-size: 12.5px; line-height: 1.6; }

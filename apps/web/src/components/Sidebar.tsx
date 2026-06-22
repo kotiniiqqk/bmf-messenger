@@ -1,12 +1,38 @@
 import { useUIStore } from "../store/uiStore";
-import { CHATS } from "../data/mock";
+import { useChatStore } from "../store/chatStore";
+import { useAuthStore } from "../store/authStore";
+import type { ApiChat } from "../api/types";
 import { Icon } from "./Icon";
 
-export function Sidebar() {
-  const { section, setSection, activeChatId, setActiveChat, menuOpen, toggleMenu, search, setSearch, showToast } =
-    useUIStore();
+function fmtTime(at?: string) {
+  if (!at) return "";
+  const d = new Date(at);
+  const today = new Date();
+  if (d.toDateString() === today.toDateString())
+    return d.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
+  return d.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit" });
+}
 
-  const chats = CHATS.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()));
+export function Sidebar() {
+  const { section, setSection, menuOpen, toggleMenu, search, setSearch, showToast } = useUIStore();
+  const { chats, activeChatId, openChat, startDm, onlineUsers, meId } = useChatStore();
+  const logout = useAuthStore((s) => s.logout);
+  const me = useAuthStore((s) => s.user);
+
+  const filtered = chats.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()));
+
+  const otherOnline = (c: ApiChat) => {
+    if (c.type !== "dm") return false;
+    const other = c.members.find((m) => m.id !== meId);
+    return other ? onlineUsers.has(other.id) : false;
+  };
+
+  async function newChat() {
+    const username = window.prompt("Имя пользователя для нового чата:");
+    if (!username) return;
+    const chat = await startDm(username.trim().toLowerCase());
+    if (!chat) showToast("Пользователь не найден");
+  }
 
   async function checkUpdates() {
     toggleMenu(false);
@@ -28,22 +54,20 @@ export function Sidebar() {
           <span /><span /><span />
         </button>
         <div className={`hbg-menu${menuOpen ? " open" : ""}`}>
-          <div
-            className={`hbg-item${section === "messenger" ? " on" : ""}`}
-            onClick={() => setSection("messenger")}
-          >
+          <div className={`hbg-item${section === "messenger" ? " on" : ""}`} onClick={() => setSection("messenger")}>
             <Icon name="home" /> <span>Главная</span>
           </div>
           <div className="hbg-sep" />
-          <div
-            className={`hbg-item${section === "mail" ? " on" : ""}`}
-            onClick={() => setSection("mail")}
-          >
+          <div className={`hbg-item${section === "mail" ? " on" : ""}`} onClick={() => setSection("mail")}>
             <Icon name="mail" /> <span>Почта</span>
           </div>
           <div className="hbg-sep" />
           <div className="hbg-item" onClick={checkUpdates}>
             <Icon name="home" /> <span>Проверить обновления</span>
+          </div>
+          <div className="hbg-sep" />
+          <div className="hbg-item" onClick={() => { toggleMenu(false); logout(); }}>
+            <Icon name="logout" /> <span>Выйти{me ? ` (@${me.username})` : ""}</span>
           </div>
         </div>
 
@@ -58,30 +82,32 @@ export function Sidebar() {
           />
         </div>
 
-        <button className="gear" title="Настройки">
-          <Icon name="gear" />
+        <button className="gear" title="Новый чат" onClick={newChat}>
+          <Icon name="plus" />
         </button>
       </div>
 
       <div className="sb-div" />
 
       <div className="chat-list">
-        {chats.map((c) => (
+        {filtered.length === 0 && (
+          <div className="chat-empty">Пока нет чатов.<br />Нажми «+», чтобы начать.</div>
+        )}
+        {filtered.map((c) => (
           <div
             key={c.id}
             className={`ci${c.id === activeChatId ? " on" : ""}`}
-            onClick={() => setActiveChat(c.id)}
+            onClick={() => openChat(c.id)}
           >
-            <div className={`av${c.online ? " ol" : ""}`} style={{ background: c.color }}>
-              {c.av}
+            <div className={`av${otherOnline(c) ? " ol" : ""}`} style={{ background: c.avatarColor }}>
+              {(c.name[0] ?? "?").toUpperCase()}
             </div>
             <div className="ci-info">
               <div className="ci-name">{c.name}</div>
-              <div className="ci-prev">{c.prev}</div>
+              <div className="ci-prev">{c.lastMessage?.text || "Нет сообщений"}</div>
             </div>
             <div className="ci-meta">
-              <span className="ci-time">{c.time}</span>
-              {c.unread > 0 && <span className="badge">{c.unread}</span>}
+              <span className="ci-time">{fmtTime(c.lastMessage?.at)}</span>
             </div>
           </div>
         ))}
