@@ -28,3 +28,5 @@ jobs:
         run: npm --workspace @bmf/desktop run dist
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # exe смотрит на прод-сервер мессенджера
+          VITE_API_URL: https://bmf.ink

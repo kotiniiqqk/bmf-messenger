@@ -1,0 +1,69 @@
+import { Router } from "express";
+import { z } from "zod";
+import { Types } from "mongoose";
+import { ChatModel } from "../models/Chat.js";
+import { MessageModel, publicMessage } from "../models/Message.js";
+import { UserModel, publicUser } from "../models/User.js";
+import { requireAuth } from "../middleware/auth.js";
+export const chatsRouter = Router();
+chatsRouter.use(requireAuth);
+/** Сериализация чата для клиента: для DM имя/аватар берём у собеседника. */
+export async function serializeChat(chat, meId) {
+    const members = (await UserModel.find({ _id: { $in: chat.members } }));
+    let name = chat.name;
+    let avatarColor = chat.avatarColor;
+    if (chat.type === "dm") {
+        const other = members.find((m) => m._id.toString() !== meId) ?? members[0];
+        name = other ? other.displayName || other.username : "Чат";
+        avatarColor = other?.avatarColor ?? "#6366f1";
+    }
+    return {
+        id: chat._id.toString(),
+        type: chat.type,
+        name,
+        avatarColor,
+        members: members.map(publicUser),
+        lastMessage: chat.lastMessage?.at
+            ? { text: chat.lastMessage.text, at: chat.lastMessage.at }
+            : null,
+        updatedAt: chat.updatedAt
+    };
+}
+chatsRouter.get("/", async (req, res) => {
+    const chats = await ChatModel.find({ members: req.userId }).sort({ updatedAt: -1 });
+    res.json({ chats: await Promise.all(chats.map((c) => serializeChat(c, req.userId))) });
+});
+const dmSchema = z.object({ username: z.string() });
+chatsRouter.post("/dm", async (req, res) => {
+    const parsed = dmSchema.safeParse(req.body);
+    if (!parsed.success) {
+        res.status(400).json({ error: "invalid_input" });
+        return;
+    }
+    const other = await UserModel.findOne({ username: parsed.data.username.toLowerCase() });
+    if (!other) {
+        res.status(404).json({ error: "user_not_found" });
+        return;
+    }
+    if (other._id.toString() === req.userId) {
+        res.status(400).json({ error: "cannot_dm_self" });
+        return;
+    }
+    let chat = await ChatModel.findOne({
+        type: "dm",
+        members: { $all: [req.userId, other._id], $size: 2 }
+    });
+    if (!chat) {
+        chat = await ChatModel.create({ type: "dm", members: [new Types.ObjectId(req.userId), other._id] });
+    }
+    res.json({ chat: await serializeChat(chat, req.userId) });
+});
+chatsRouter.get("/:id/messages", async (req, res) => {
+    const chat = await ChatModel.findOne({ _id: req.params.id, members: req.userId });
+    if (!chat) {
+        res.status(404).json({ error: "not_found" });
+        return;
+    }
+    const msgs = await MessageModel.find({ chatId: chat._id }).sort({ createdAt: 1 }).limit(200);
+    res.json({ messages: msgs.map(publicMessage) });
+});

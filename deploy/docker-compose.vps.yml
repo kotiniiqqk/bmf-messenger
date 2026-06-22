@@ -1,0 +1,34 @@
+# Деплой мессенджер-ядра на VPS. Отдельные контейнеры, почтовый стек не трогаем.
+# Наружу не публикуем порты — доступ через Caddy (bmf-core) на https://bmf.ink.
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bmf-msg-api
+    restart: unless-stopped
+    env_file:
+      - ./api.env
+    depends_on:
+      - mongo
+    networks:
+      - internal
+      - edge
+
+  mongo:
+    image: mongo:7
+    container_name: bmf-msg-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - internal
+
+volumes:
+  mongo_data:
+
+networks:
+  internal:
+  edge:
+    external: true
+    name: bmf-core_default

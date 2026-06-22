@@ -7,6 +7,9 @@ apps/desktop/build/
 apps/desktop/renderer/
 apps/desktop/release/
 
+# локальный деплой-бандл
+.deploy/
+
 # env / secrets
 .env
 .env.*
