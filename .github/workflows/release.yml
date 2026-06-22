@@ -1,0 +1,30 @@
+name: Release Desktop
+
+# Пуш тега vX.Y.Z → сборка Windows-установщика и публикация в GitHub Releases.
+# Внутри приложения кнопка «Проверить обновления» забирает этот релиз.
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build & publish desktop
+        run: npm --workspace @bmf/desktop run dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

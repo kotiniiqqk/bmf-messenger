@@ -1,0 +1,14 @@
+{
+  "name": "bmf",
+  "private": true,
+  "version": "0.0.0",
+  "description": "BMF ecosystem monorepo — единый аккаунт (BMF ID), почта, мессенджер, звонки.",
+  "workspaces": [
+    "apps/*",
+    "services/*"
+  ],
+  "scripts": {
+    "dev:web": "npm --workspace apps/web run dev",
+    "build:web": "npm --workspace apps/web run build"
+  }
+}

@@ -1,0 +1,19 @@
+# deps
+node_modules/
+
+# build artifacts
+apps/web/dist/
+apps/desktop/build/
+apps/desktop/renderer/
+apps/desktop/release/
+
+# env / secrets
+.env
+.env.*
+*.local
+
+# os / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
