@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { api } from "../api/client";
 import { getSocket } from "../api/socket";
+import { useCallStore } from "./callStore";
 import type { ApiChat, ApiMessage } from "../api/types";
 
 interface ChatState {
@@ -57,6 +58,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
         });
       });
       s.on("disconnect", () => set({ attached: false }));
+      useCallStore.getState().initSignaling();
     }
     try {
       const { chats } = await api.listChats();

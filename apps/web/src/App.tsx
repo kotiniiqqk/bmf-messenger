@@ -5,6 +5,8 @@ import { TitleBar } from "./components/TitleBar";
 import { Sidebar } from "./components/Sidebar";
 import { ChatView } from "./components/ChatView";
 import { AuthPanel } from "./components/AuthPanel";
+import { CallOverlay } from "./components/CallOverlay";
+import { IncomingCall } from "./components/IncomingCall";
 
 export default function App() {
   const { theme, section, accent, opacity, toast } = useUIStore();
@@ -39,6 +41,8 @@ export default function App() {
           )}
         </div>
       )}
+      {status === "authed" && <IncomingCall />}
+      {status === "authed" && <CallOverlay />}
       <div className={`toast${toast ? " show" : ""}`}>{toast}</div>
     </div>
   );

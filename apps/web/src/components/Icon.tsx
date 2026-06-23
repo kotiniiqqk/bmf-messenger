@@ -3,7 +3,8 @@ import type { SVGProps } from "react";
 type IconName =
   | "logo" | "search" | "gear" | "mail" | "home"
   | "send" | "attach" | "emoji" | "phone" | "video" | "more"
-  | "plus" | "logout";
+  | "plus" | "logout"
+  | "mic" | "micOff" | "camOff" | "screen" | "hangup";
 
 const PATHS: Record<IconName, JSX.Element> = {
   logo: <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />,
@@ -18,7 +19,12 @@ const PATHS: Record<IconName, JSX.Element> = {
   video: <><polygon points="23 7 16 12 23 17 23 7" /><rect x="1" y="5" width="15" height="14" rx="2" /></>,
   more: <><circle cx="12" cy="5" r="1" fill="currentColor" /><circle cx="12" cy="12" r="1" fill="currentColor" /><circle cx="12" cy="19" r="1" fill="currentColor" /></>,
   plus: <><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></>,
-  logout: <><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></>
+  logout: <><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></>,
+  mic: <><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /></>,
+  micOff: <><line x1="1" y1="1" x2="23" y2="23" /><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6" /><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23" /><line x1="12" y1="19" x2="12" y2="23" /></>,
+  camOff: <><line x1="1" y1="1" x2="23" y2="23" /><path d="M16 16H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2m4 0h4a2 2 0 0 1 2 2v4m-4 4 7 4V8" /></>,
+  screen: <><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></>,
+  hangup: <><path d="M22 16.92A19.6 19.6 0 0 1 12 21 19.6 19.6 0 0 1 2 16.92a2 2 0 0 1 .2-2.32l1.9-2.1a2 2 0 0 1 2.3-.5l2.2.9a13 13 0 0 0 6.8 0l2.2-.9a2 2 0 0 1 2.3.5l1.9 2.1a2 2 0 0 1 .2 2.32z" transform="rotate(135 12 14)" /></>
 };
 
 export function Icon({ name, ...props }: { name: IconName } & SVGProps<SVGSVGElement>) {

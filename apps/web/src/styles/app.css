@@ -271,3 +271,80 @@ body {
 .auth-switch { font-size: 12.5px; color: var(--txt2); text-align: center; margin-top: 2px; }
 .auth-switch span { color: var(--acc); font-weight: 600; cursor: pointer; }
 .chat-empty { padding: 30px 16px; text-align: center; color: var(--txt2); font-size: 12.5px; line-height: 1.6; }
+
+/* ── ЗВОНКИ (WebRTC) ── */
+.ib:disabled { opacity: 0.4; cursor: default; }
+
+.call-overlay {
+  position: fixed; inset: 0; z-index: 1200;
+  display: flex; flex-direction: column;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(99, 102, 241, 0.35) 0%, transparent 55%),
+    linear-gradient(135deg, #07071a 0%, #0f1230 55%, #07152a 100%);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.call-head { padding: 18px 22px 6px; text-align: center; color: #fff; }
+.call-title { font-size: 17px; font-weight: 800; letter-spacing: -0.2px; }
+.call-sub { font-size: 12.5px; color: rgba(255, 255, 255, 0.6); margin-top: 2px; }
+
+.call-grid {
+  flex: 1; display: grid; gap: 12px; padding: 16px 22px; overflow: auto;
+  grid-template-columns: 1fr;
+}
+.call-grid.n2 { grid-template-columns: 1fr 1fr; }
+.call-grid.n3, .call-grid.n4 { grid-template-columns: 1fr 1fr; }
+
+.call-tile {
+  position: relative; border-radius: 18px; overflow: hidden;
+  background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 180px; display: flex; align-items: center; justify-content: center;
+}
+.call-tile video { width: 100%; height: 100%; object-fit: cover; background: #000; }
+.call-tile-ph {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 44px; font-weight: 800; color: #fff;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.5), rgba(59, 130, 246, 0.5));
+}
+.call-tile-name {
+  position: absolute; left: 10px; bottom: 10px; padding: 3px 10px; border-radius: 10px;
+  font-size: 12px; color: #fff; background: rgba(0, 0, 0, 0.5);
+}
+
+.call-ctrls { display: flex; gap: 14px; justify-content: center; padding: 16px 0 26px; }
+.call-btn {
+  width: 54px; height: 54px; border-radius: 50%; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255, 255, 255, 0.14); color: #fff; transition: background 0.15s, filter 0.15s;
+}
+.call-btn svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; fill: none; }
+.call-btn:hover { background: rgba(255, 255, 255, 0.24); }
+.call-btn.off { background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.55); }
+.call-btn.on { background: var(--acc); }
+.call-btn.hangup { background: #ef4444; }
+.call-btn.hangup:hover { background: #dc2626; }
+
+/* входящий звонок */
+.ring-toast {
+  position: fixed; top: 54px; right: 22px; z-index: 1300;
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+  background: var(--sp-bg); border: 1px solid var(--brd); border-radius: 18px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+  animation: ring-in 0.25s ease;
+}
+@keyframes ring-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+.ring-ava {
+  width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 800; color: #fff; background: linear-gradient(135deg, var(--acc), #3b82f6);
+}
+.ring-info { min-width: 120px; }
+.ring-name { font-size: 14px; font-weight: 700; color: var(--txt); }
+.ring-sub { font-size: 12px; color: var(--txt2); }
+.ring-acts { display: flex; gap: 8px; }
+.ring-btn {
+  width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; color: #fff;
+}
+.ring-btn svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; }
+.ring-btn.accept { background: #22c55e; }
+.ring-btn.decline { background: #ef4444; }

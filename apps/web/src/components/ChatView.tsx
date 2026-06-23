@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { useChatStore } from "../store/chatStore";
+import { useCallStore } from "../store/callStore";
 import { Icon } from "./Icon";
 
 const fmt = (at: string) => new Date(at).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
 
 export function ChatView() {
   const { chats, activeChatId, messages, meId, send, onlineUsers } = useChatStore();
+  const startCall = useCallStore((s) => s.startCall);
+  const inCall = useCallStore((s) => s.status === "active");
   const chat = chats.find((c) => c.id === activeChatId);
   const msgs = activeChatId ? messages[activeChatId] ?? [] : [];
 
@@ -58,8 +61,12 @@ export function ChatView() {
           </div>
         </div>
         <div className="ch-acts">
-          <button className="ib" title="Видеозвонок"><Icon name="video" /></button>
-          <button className="ib" title="Звонок"><Icon name="phone" /></button>
+          <button className="ib" title="Видеозвонок" disabled={inCall} onClick={() => activeChatId && void startCall(activeChatId, true)}>
+            <Icon name="video" />
+          </button>
+          <button className="ib" title="Звонок" disabled={inCall} onClick={() => activeChatId && void startCall(activeChatId, false)}>
+            <Icon name="phone" />
+          </button>
           <button className="ib" title="Ещё"><Icon name="more" /></button>
         </div>
       </div>
