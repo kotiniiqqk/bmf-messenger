@@ -1,7 +1,7 @@
 {
   "name": "@bmf/desktop",
   "private": true,
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "BMF desktop (Electron) — оболочка с авто-обновлением через GitHub Releases.",
   "main": "build/main.js",
   "scripts": {
@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "electron": "33.4.11",
-    "electron-builder": "^25.1.8",
+    "electron-builder": "24.13.3",
     "typescript": "^5.6.3"
   },
   "build": {
