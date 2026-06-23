@@ -1,7 +1,7 @@
 {
   "name": "@bmf/desktop",
   "private": true,
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "BMF desktop (Electron) — оболочка с авто-обновлением через GitHub Releases.",
   "main": "build/main.js",
   "scripts": {
@@ -36,7 +36,8 @@
       {
         "provider": "github",
         "owner": "kotiniiqqk",
-        "repo": "bmf-messenger"
+        "repo": "bmf-messenger",
+        "releaseType": "release"
       }
     ],
     "win": {
