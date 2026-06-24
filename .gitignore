@@ -20,3 +20,6 @@ apps/desktop/release/
 Thumbs.db
 .vscode/
 .idea/
+
+# собранный dist API (артефакт; деплой через tar, CI собирает заново)
+services/api/dist/

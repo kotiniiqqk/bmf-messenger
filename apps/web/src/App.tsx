@@ -4,6 +4,7 @@ import { useAuthStore } from "./store/authStore";
 import { TitleBar } from "./components/TitleBar";
 import { Sidebar } from "./components/Sidebar";
 import { ChatView } from "./components/ChatView";
+import { MailView } from "./components/MailView";
 import { AuthPanel } from "./components/AuthPanel";
 import { CallOverlay } from "./components/CallOverlay";
 import { IncomingCall } from "./components/IncomingCall";
@@ -34,11 +35,7 @@ export default function App() {
       {status === "authed" && (
         <div className="body">
           <Sidebar />
-          {section === "messenger" ? (
-            <ChatView />
-          ) : (
-            <div className="cv"><div className="cv-empty">Почта — следующий этап (M2)</div></div>
-          )}
+          {section === "messenger" ? <ChatView /> : <MailView />}
         </div>
       )}
       {status === "authed" && <IncomingCall />}

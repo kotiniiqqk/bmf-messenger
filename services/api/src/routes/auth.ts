@@ -2,6 +2,7 @@ import { Router } from "express";
 import { z } from "zod";
 import { UserModel, publicUser } from "../models/User.js";
 import { hashPassword, verifyPassword } from "../lib/password.js";
+import { encryptSecret } from "../lib/crypto.js";
 import { signToken } from "../lib/jwt.js";
 import { newBmfId, colorFor } from "../lib/ids.js";
 import { env } from "../config/env.js";
@@ -46,10 +47,15 @@ authRouter.post("/login", async (req, res) => {
     return;
   }
   const username = parsed.data.username.toLowerCase();
-  const user = await UserModel.findOne({ username }).select("+passwordHash");
+  const user = await UserModel.findOne({ username }).select("+passwordHash +mailSecretEnc");
   if (!user || !(await verifyPassword(parsed.data.password, user.passwordHash))) {
     res.status(401).json({ error: "invalid_credentials" });
     return;
+  }
+  // Держим секрет почты в синхроне с актуальным паролем мессенджера.
+  if (user.mailEnabled) {
+    user.mailSecretEnc = encryptSecret(parsed.data.password);
+    await user.save();
   }
   res.json({ token: signToken({ sub: user._id.toString(), username }), user: publicUser(user) });
 });

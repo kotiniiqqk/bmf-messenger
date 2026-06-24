@@ -7,7 +7,10 @@ const userSchema = new Schema(
     email: { type: String, required: true },
     displayName: { type: String, default: "" },
     passwordHash: { type: String, required: true, select: false },
-    avatarColor: { type: String, default: "#6366f1" }
+    avatarColor: { type: String, default: "#6366f1" },
+    // Почта (Stalwart): включён ли ящик и обратимо-зашифрованный секрет для IMAP/JMAP.
+    mailEnabled: { type: Boolean, default: false },
+    mailSecretEnc: { type: String, default: "", select: false }
   },
   { timestamps: true }
 );
@@ -23,6 +26,7 @@ export function publicUser(u: UserDoc) {
     username: u.username,
     email: u.email,
     displayName: u.displayName || u.username,
-    avatarColor: u.avatarColor
+    avatarColor: u.avatarColor,
+    mailEnabled: Boolean(u.mailEnabled)
   };
 }

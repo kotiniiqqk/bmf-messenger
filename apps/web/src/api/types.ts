@@ -9,7 +9,7 @@ export interface ApiUser {
 
 export interface ApiChat {
   id: string;
-  type: "dm" | "group";
+  type: "dm" | "group" | "saved";
   name: string;
   avatarColor: string;
   members: ApiUser[];
@@ -23,4 +23,28 @@ export interface ApiMessage {
   senderId: string;
   text: string;
   createdAt: string;
+}
+
+export interface ApiMailStatus {
+  enabled: boolean;
+  address: string;
+  available: boolean;
+}
+
+export interface ApiMailHead {
+  id: string;
+  subject: string;
+  from: string;
+  preview: string;
+  receivedAt: string;
+  seen: boolean;
+}
+
+export interface ApiMailFull {
+  id: string;
+  subject: string;
+  from: string;
+  to: string;
+  receivedAt: string;
+  text: string;
 }

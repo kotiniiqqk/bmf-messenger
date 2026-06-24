@@ -8,5 +8,16 @@ export const env = {
   CLIENT_ORIGINS: (process.env.CLIENT_ORIGINS ?? "http://localhost:5173")
     .split(",")
     .map((s) => s.trim())
-    .filter(Boolean)
+    .filter(Boolean),
+
+  // ── Stalwart (почта, единый ID) ──
+  // Базовый URL management/JMAP API Stalwart (внутри docker-сети — http://stalwart:8080).
+  STALWART_BASE_URL: process.env.STALWART_BASE_URL ?? "",
+  // Админ-креды Stalwart для создания почтовых ящиков (Basic-auth).
+  STALWART_API_USER: process.env.STALWART_API_USER ?? "",
+  STALWART_API_SECRET: process.env.STALWART_API_SECRET ?? "",
+  // Включена ли почтовая интеграция (выставляется автоматически, если задан STALWART_BASE_URL).
+  get MAIL_ENABLED() {
+    return Boolean(process.env.STALWART_BASE_URL);
+  }
 };

@@ -4,8 +4,9 @@ import cors from "cors";
 import { env } from "./config/env.js";
 import { authRouter } from "./routes/auth.js";
 import { chatsRouter } from "./routes/chats.js";
+import { mailRouter } from "./routes/mail.js";
 
-const API_PREFIXES = ["/health", "/auth", "/chats", "/socket.io"];
+const API_PREFIXES = ["/health", "/auth", "/chats", "/mail", "/socket.io"];
 
 export function buildApp() {
   const app = express();
@@ -19,6 +20,7 @@ export function buildApp() {
 
   app.use("/auth", authRouter);
   app.use("/chats", chatsRouter);
+  app.use("/mail", mailRouter);
 
   // Раздача собранного веб-клиента (тот же контейнер отдаёт SPA), если задан WEB_DIR.
   const webDir = process.env.WEB_DIR;

@@ -9,6 +9,15 @@ import { requireAuth, type AuthedRequest } from "../middleware/auth.js";
 export const chatsRouter = Router();
 chatsRouter.use(requireAuth);
 
+/** Найти-или-создать чат «Избранное» (заметки самому себе). */
+export async function ensureFavorites(meId: string) {
+  let chat = await ChatModel.findOne({ type: "saved", members: meId });
+  if (!chat) {
+    chat = await ChatModel.create({ type: "saved", members: [new Types.ObjectId(meId)], name: "Избранное", avatarColor: "#f59e0b" });
+  }
+  return chat;
+}
+
 /** Сериализация чата для клиента: для DM имя/аватар берём у собеседника. */
 export async function serializeChat(chat: any, meId: string) {
   const members = (await UserModel.find({ _id: { $in: chat.members } })) as UserDoc[];
@@ -18,6 +27,9 @@ export async function serializeChat(chat: any, meId: string) {
     const other = members.find((m) => m._id.toString() !== meId) ?? members[0];
     name = other ? other.displayName || other.username : "Чат";
     avatarColor = other?.avatarColor ?? "#6366f1";
+  } else if (chat.type === "saved") {
+    name = "Избранное";
+    avatarColor = "#f59e0b";
   }
   return {
     id: chat._id.toString(),
@@ -33,7 +45,10 @@ export async function serializeChat(chat: any, meId: string) {
 }
 
 chatsRouter.get("/", async (req: AuthedRequest, res) => {
+  await ensureFavorites(req.userId!);
   const chats = await ChatModel.find({ members: req.userId }).sort({ updatedAt: -1 });
+  // «Избранное» всегда первым.
+  chats.sort((a, b) => (a.type === "saved" ? -1 : b.type === "saved" ? 1 : 0));
   res.json({ chats: await Promise.all(chats.map((c) => serializeChat(c, req.userId!))) });
 });
 

@@ -1,5 +1,5 @@
 import { API_URL } from "../config";
-import type { ApiChat, ApiMessage, ApiUser } from "./types";
+import type { ApiChat, ApiMessage, ApiUser, ApiMailHead, ApiMailFull, ApiMailStatus } from "./types";
 
 let authToken: string | null = null;
 export const setAuthToken = (t: string | null) => {
@@ -34,5 +34,12 @@ export const api = {
   me: () => req<{ user: ApiUser }>("/auth/me", "GET"),
   listChats: () => req<{ chats: ApiChat[] }>("/chats", "GET"),
   startDm: (username: string) => req<{ chat: ApiChat }>("/chats/dm", "POST", { username }),
-  messages: (chatId: string) => req<{ messages: ApiMessage[] }>(`/chats/${chatId}/messages`, "GET")
+  messages: (chatId: string) => req<{ messages: ApiMessage[] }>(`/chats/${chatId}/messages`, "GET"),
+
+  // ── Почта ──
+  mailStatus: () => req<ApiMailStatus>("/mail/status", "GET"),
+  mailConnect: (password: string) => req<{ ok: boolean; address: string }>("/mail/connect", "POST", { password }),
+  mailList: () => req<{ messages: ApiMailHead[] }>("/mail", "GET"),
+  mailGet: (id: string) => req<{ message: ApiMailFull }>(`/mail/${id}`, "GET"),
+  mailSend: (b: { to: string; subject: string; text: string }) => req<{ ok: boolean }>("/mail/send", "POST", b)
 };

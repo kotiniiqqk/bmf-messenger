@@ -348,3 +348,63 @@ body {
 .ring-btn svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; }
 .ring-btn.accept { background: #22c55e; }
 .ring-btn.decline { background: #ef4444; }
+
+/* ── ПОЧТА ── */
+.mail-connect {
+  margin: auto; width: 360px; max-width: 90%; text-align: center;
+  display: flex; flex-direction: column; gap: 10px; padding: 28px;
+}
+.mail-connect-icon svg { width: 40px; height: 40px; stroke: var(--acc); stroke-width: 2; fill: none; }
+.mail-connect-title { font-size: 18px; font-weight: 800; color: var(--txt); }
+.mail-connect-sub { font-size: 13px; color: var(--txt2); line-height: 1.5; margin-bottom: 6px; }
+.mail-connect-sub b { color: var(--acc); }
+
+.mail-body { flex: 1; display: flex; min-height: 0; }
+.mail-list { width: 320px; border-right: 1px solid var(--brd); overflow-y: auto; flex-shrink: 0; }
+.mail-row { padding: 12px 14px; border-bottom: 1px solid var(--brd); cursor: pointer; transition: background 0.12s; }
+.mail-row:hover { background: var(--hov); }
+.mail-row.active { background: var(--act); }
+.mail-row.unread .mail-subj { font-weight: 800; }
+.mail-row.unread .mail-from { font-weight: 700; }
+.mail-row-top { display: flex; justify-content: space-between; gap: 8px; }
+.mail-from { font-size: 13px; color: var(--txt); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mail-time { font-size: 11px; color: var(--txt2); flex-shrink: 0; }
+.mail-subj { font-size: 13px; color: var(--txt); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mail-prev { font-size: 12px; color: var(--txt2); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.mail-read { flex: 1; overflow-y: auto; padding: 22px 26px; min-width: 0; }
+.mail-open-subj { font-size: 19px; font-weight: 800; color: var(--txt); margin-bottom: 8px; }
+.mail-open-meta { font-size: 12.5px; color: var(--txt2); line-height: 1.7; padding-bottom: 12px; border-bottom: 1px solid var(--brd); }
+.mail-open-body { font-size: 14px; color: var(--txt); line-height: 1.6; margin-top: 14px; white-space: pre-wrap; word-break: break-word; }
+
+.mail-compose { display: flex; flex-direction: column; gap: 10px; max-width: 620px; }
+.mail-compose-h { font-size: 16px; font-weight: 800; color: var(--txt); }
+.mail-text {
+  min-height: 220px; resize: vertical; border: 1px solid var(--brd); border-radius: 13px;
+  background: var(--inp); color: var(--txt); font-size: 14px; padding: 12px 14px; outline: none;
+  font-family: inherit; line-height: 1.5;
+}
+.mail-text:focus { border-color: var(--acc); }
+.mail-compose-acts { display: flex; align-items: center; gap: 12px; }
+.mail-compose-acts .auth-btn { width: auto; padding: 0 22px; }
+
+/* ── Модалка (новый чат и т.п.) ── */
+.modal-ov {
+  position: fixed; inset: 0; z-index: 1400; display: flex; align-items: center; justify-content: center;
+  background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+}
+.modal {
+  width: 360px; max-width: 92%; display: flex; flex-direction: column; gap: 10px; padding: 22px;
+  background: var(--sp-bg); border: 1px solid var(--brd); border-radius: 20px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+  animation: ring-in 0.2s ease;
+}
+.modal-h { display: flex; align-items: center; justify-content: space-between; }
+.modal-h span { font-size: 17px; font-weight: 800; color: var(--txt); }
+.modal-h .ib svg { width: 18px; height: 18px; stroke: var(--txt2); stroke-width: 2; fill: none; }
+.modal-sub { font-size: 12.5px; color: var(--txt2); line-height: 1.5; }
+.modal .auth-btn { width: 100%; }
+
+/* звезда «Избранного» в аватаре */
+.av svg { width: 22px; height: 22px; stroke: #fff; fill: #fff; }

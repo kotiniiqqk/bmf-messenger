@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useUIStore } from "../store/uiStore";
 import { useChatStore } from "../store/chatStore";
 import { useAuthStore } from "../store/authStore";
@@ -19,6 +20,10 @@ export function Sidebar() {
   const logout = useAuthStore((s) => s.logout);
   const me = useAuthStore((s) => s.user);
 
+  const [newOpen, setNewOpen] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newBusy, setNewBusy] = useState(false);
+
   const filtered = chats.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()));
 
   const otherOnline = (c: ApiChat) => {
@@ -27,11 +32,18 @@ export function Sidebar() {
     return other ? onlineUsers.has(other.id) : false;
   };
 
-  async function newChat() {
-    const username = window.prompt("Имя пользователя для нового чата:");
+  async function submitNewChat() {
+    const username = newName.trim().toLowerCase();
     if (!username) return;
-    const chat = await startDm(username.trim().toLowerCase());
-    if (!chat) showToast("Пользователь не найден");
+    setNewBusy(true);
+    const chat = await startDm(username);
+    setNewBusy(false);
+    if (chat) {
+      setNewOpen(false);
+      setNewName("");
+    } else {
+      showToast("Пользователь не найден");
+    }
   }
 
   async function checkUpdates() {
@@ -82,7 +94,7 @@ export function Sidebar() {
           />
         </div>
 
-        <button className="gear" title="Новый чат" onClick={newChat}>
+        <button className="gear" title="Новый чат" onClick={() => { setNewOpen(true); setNewName(""); }}>
           <Icon name="plus" />
         </button>
       </div>
@@ -100,7 +112,7 @@ export function Sidebar() {
             onClick={() => openChat(c.id)}
           >
             <div className={`av${otherOnline(c) ? " ol" : ""}`} style={{ background: c.avatarColor }}>
-              {(c.name[0] ?? "?").toUpperCase()}
+              {c.type === "saved" ? <Icon name="star" /> : (c.name[0] ?? "?").toUpperCase()}
             </div>
             <div className="ci-info">
               <div className="ci-name">{c.name}</div>
@@ -112,6 +124,29 @@ export function Sidebar() {
           </div>
         ))}
       </div>
+
+      {newOpen && (
+        <div className="modal-ov" onClick={() => setNewOpen(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-h">
+              <span>Новый чат</span>
+              <button className="ib" onClick={() => setNewOpen(false)}><Icon name="close" /></button>
+            </div>
+            <div className="modal-sub">Введите имя пользователя (логин), которому хотите написать.</div>
+            <input
+              className="auth-inp"
+              autoFocus
+              placeholder="имя пользователя"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && submitNewChat()}
+            />
+            <button className="auth-btn" disabled={!newName.trim() || newBusy} onClick={submitNewChat}>
+              {newBusy ? "Создаём…" : "Создать чат"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

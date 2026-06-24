@@ -2,7 +2,7 @@ import { Schema, model, InferSchemaType, Types } from "mongoose";
 
 const chatSchema = new Schema(
   {
-    type: { type: String, enum: ["dm", "group"], default: "dm" },
+    type: { type: String, enum: ["dm", "group", "saved"], default: "dm" },
     members: [{ type: Schema.Types.ObjectId, ref: "User", index: true }],
     name: { type: String, default: "" },
     avatarColor: { type: String, default: "#6366f1" },
